@@ -12,6 +12,7 @@ Build-Depends: debhelper-compat (= 13),
  libtest-tcp-perl (>= 1.08),
  libzmq-constants-perl (>= 1.04),
  libzmq3-dev | libzmq5-dev,
+ libmodule-install-perl,
  libmodule-install-readmefrompod-perl,
  perl (>= 5.10.0-12) | libextutils-parsexs-perl (>= 2.2.1),
  perl (>= 5.13.11) | libtest-simple-perl (>= 0.98)
