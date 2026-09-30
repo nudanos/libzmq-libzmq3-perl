@@ -1,8 +1,9 @@
 Source: libzmq-libzmq3-perl
 Section: perl
 Priority: optional
-Maintainer: Vyatta Package Maintainers <DL-vyatta-help@att.com>
-Build-Depends: debhelper (>= 9), perl,
+Maintainer: NuDanOS Maintainers <jon@fernandez.tech>
+Build-Depends: debhelper-compat (= 13),
+ perl,
  libanyevent-perl,
  libdevel-checklib-perl,
  libtask-weaken-perl,
@@ -14,8 +15,11 @@ Build-Depends: debhelper (>= 9), perl,
  libmodule-install-readmefrompod-perl,
  perl (>= 5.10.0-12) | libextutils-parsexs-perl (>= 2.2.1),
  perl (>= 5.13.11) | libtest-simple-perl (>= 0.98)
-Standards-Version: 3.9.8
+Standards-Version: 4.7.2
 Homepage: https://metacpan.org/release/ZMQ-LibZMQ3
+Rules-Requires-Root: no
+Vcs-Git: https://github.com/nudanos/libzmq-libzmq3-perl.git
+Vcs-Browser: https://github.com/nudanos/libzmq-libzmq3-perl
 
 Package: libzmq-libzmq3-perl
 Architecture: any
