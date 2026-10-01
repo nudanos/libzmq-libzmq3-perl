@@ -192,7 +192,10 @@ repository "git://github.com/lestrrat/p5-ZMQ.git";
 homepage "https://github.com/lestrrat/p5-ZMQ";
 bugtracker "https://github.com/lestrrat/p5-ZMQ/issues";
 
-do 'tools/genfiles.pl';
+unless (defined do './tools/genfiles.pl') {
+    die "tools/genfiles.pl: $@" if $@;
+    die "tools/genfiles.pl: $!" if $!;
+}
 WriteAll;
 
 if ($^O eq 'darwin' && -f "Makefile") {
