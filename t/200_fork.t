@@ -1,4 +1,6 @@
+#!/usr/bin/perl
 use strict;
+use warnings;
 use Test::More;
 
 BEGIN {
@@ -10,27 +12,27 @@ subtest 'parent creates context and forks, child exists w/o doing anything' => s
     my $ctx = zmq_init(1);
     my $pid = fork();
     exit(0) unless $pid;
-    waitpid($pid, 0);
+    waitpid( $pid, 0 );
     pass('zmq_init() is fork-resistant');
 };
 
 subtest 'parent creates context and forks, child calls zmq_term' => sub {
     my $ctx = zmq_init(1);
     my $pid = fork();
-    if (! $pid) {
+    if ( !$pid ) {
         zmq_term($ctx);
         exit(0);
     }
-    waitpid($pid, 0);
+    waitpid( $pid, 0 );
     pass('zmq_init() is fork-resistant');
 };
 
 subtest 'parent creates context, socket, and forks, child does nothing' => sub {
-    my $ctx = zmq_init(1);
-    my $sock = zmq_socket($ctx, ZMQ_REQ);
-    my $pid = fork();
+    my $ctx  = zmq_init(1);
+    my $sock = zmq_socket( $ctx, ZMQ_REQ );
+    my $pid  = fork();
     exit(0) unless $pid;
-    waitpid($pid, 0);
+    waitpid( $pid, 0 );
     pass('zmq_init() is fork-resistant');
 };
 
@@ -38,14 +40,14 @@ subtest 'parent creates context, socket, and forks, child calls zmq_close()' => 
 
     plan skip_all => 'perl panics on Windows' if $^O eq 'MSWin32';
 
-    my $ctx = zmq_init(1);
-    my $sock = zmq_socket($ctx, ZMQ_REQ);
-    my $pid = fork();
-    if (! $pid) {
+    my $ctx  = zmq_init(1);
+    my $sock = zmq_socket( $ctx, ZMQ_REQ );
+    my $pid  = fork();
+    if ( !$pid ) {
         zmq_close($sock);
         exit(0);
     }
-    waitpid($pid, 0);
+    waitpid( $pid, 0 );
     pass('zmq_init() is fork-resistant');
 };
 
@@ -54,7 +56,7 @@ subtest 'parent creates context, message, and forks, child does nothing' => sub 
     my $msg = zmq_msg_init();
     my $pid = fork();
     exit(0) unless $pid;
-    waitpid($pid, 0);
+    waitpid( $pid, 0 );
     pass('zmq_init() is fork-resistant');
 };
 

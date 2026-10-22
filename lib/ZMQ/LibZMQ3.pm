@@ -1,80 +1,83 @@
 package ZMQ::LibZMQ3;
 use strict;
 use warnings;
-use base qw(Exporter);
+use parent qw(Exporter);
 use XSLoader;
 use ZMQ::Constants ();
 
 BEGIN {
     our $VERSION = '1.19';
-    XSLoader::load(__PACKAGE__, $VERSION);
+    XSLoader::load( __PACKAGE__, $VERSION );
 }
 
+## no critic (Modules::ProhibitAutomaticExportation) reason: the ZMQ::LibZMQ3 API exports these by default
 our @EXPORT = qw(
-    zmq_errno
-    zmq_strerror
+  zmq_errno
+  zmq_strerror
 
-    zmq_init
-    zmq_term
-    zmq_ctx_new
-    zmq_ctx_destroy
-    zmq_ctx_set
-    zmq_ctx_get
+  zmq_init
+  zmq_term
+  zmq_ctx_new
+  zmq_ctx_destroy
+  zmq_ctx_set
+  zmq_ctx_get
 
-    zmq_msg_send
-    zmq_msg_recv
+  zmq_msg_send
+  zmq_msg_recv
 
-    zmq_msg_close
-    zmq_msg_data
-    zmq_msg_init
-    zmq_msg_init_data
-    zmq_msg_init_size
-    zmq_msg_size
-    zmq_msg_copy
-    zmq_msg_move
+  zmq_msg_close
+  zmq_msg_data
+  zmq_msg_init
+  zmq_msg_init_data
+  zmq_msg_init_size
+  zmq_msg_size
+  zmq_msg_copy
+  zmq_msg_move
 
-    zmq_bind
-    zmq_unbind
-    zmq_close
-    zmq_connect
-    zmq_disconnect
-    zmq_getsockopt
-    zmq_recv
-    zmq_recvmsg
-    zmq_send
-    zmq_sendmsg
-    zmq_setsockopt
-    zmq_socket
-    zmq_socket_monitor
+  zmq_bind
+  zmq_unbind
+  zmq_close
+  zmq_connect
+  zmq_disconnect
+  zmq_getsockopt
+  zmq_recv
+  zmq_recvmsg
+  zmq_send
+  zmq_sendmsg
+  zmq_setsockopt
+  zmq_socket
+  zmq_socket_monitor
 
-    zmq_poll
+  zmq_poll
 
-    zmq_device
-    zmq_proxy
+  zmq_device
+  zmq_proxy
 );
+## use critic
 
 BEGIN {
-    no warnings 'redefine';
-    if (!HAS_ZMQ_INIT && HAS_ZMQ_CTX_NEW) {
+    no warnings 'redefine';    ## no critic (TestingAndDebugging::ProhibitNoWarnings) reason: aliases the libzmq 3 names to the libzmq 4 functions
+    if ( !HAS_ZMQ_INIT && HAS_ZMQ_CTX_NEW ) {
         *zmq_init = \&zmq_ctx_new;
     }
-    if (!HAS_ZMQ_TERM && HAS_ZMQ_CTX_DESTROY) {
+    if ( !HAS_ZMQ_TERM && HAS_ZMQ_CTX_DESTROY ) {
         *zmq_term = \&zmq_ctx_destroy;
     }
 }
 
+## no critic (Subroutines::RequireArgUnpacking) reason: these pass the rest of @_ on to the XS function with goto
 sub zmq_msg_send {
     my $msg  = shift;
     my $sock = shift;
-    if (!ref $msg) {
+    if ( !ref $msg ) {
         my $wrap = zmq_msg_init_data($msg);
-        if (! $wrap) {
+        if ( !$wrap ) {
             return ();
         }
         $msg = $wrap;
     }
 
-    @_ = ($msg, $sock, @_);
+    @_ = ( $msg, $sock, @_ );
     goto \&_zmq_msg_send;
 }
 
@@ -82,41 +85,44 @@ sub zmq_sendmsg {
     my $sock = shift;
     my $msg  = shift;
     if (HAS_ZMQ_MSG_SEND) {
+
         # Delegate to zmq_msg_send
-        @_ = ($msg, $sock, @_);
+        @_ = ( $msg, $sock, @_ );
         goto \&zmq_msg_send;
-    } else {
-        if (!ref $msg) {
+    }
+    else {
+        if ( !ref $msg ) {
             my $wrap = zmq_msg_init_data($msg);
-            if (! $wrap) {
+            if ( !$wrap ) {
                 return ();
             }
             $msg = $wrap;
         }
 
-        @_ = ($sock, $msg, @_);
+        @_ = ( $sock, $msg, @_ );
         goto \&_zmq_sendmsg;
     }
 }
+## use critic
 
 sub zmq_getsockopt {
-    my ($sock, $option) = @_;
+    my ( $sock, $option ) = @_;
     my $type = ZMQ::Constants::get_sockopt_type($option);
-    if (! $type) {
+    if ( !$type ) {
         Carp::croak("zmq_getsockopt: Could not find the data type for option $option");
     }
-    no strict 'refs';
-    goto &{"zmq_getsockopt_$type"}
+    no strict 'refs';    ## no critic (TestingAndDebugging::ProhibitNoStrict) reason: dispatches to the XS function for the option's type
+    goto &{"zmq_getsockopt_$type"};
 }
 
 sub zmq_setsockopt {
-    my ($sock, $option) = @_;
+    my ( $sock, $option ) = @_;
     my $type = ZMQ::Constants::get_sockopt_type($option);
-    if (! $type) {
+    if ( !$type ) {
         Carp::croak("zmq_setsockopt: Could not find the data type for option $option");
     }
-    no strict 'refs';
-    goto &{"zmq_setsockopt_$type"}
+    no strict 'refs';    ## no critic (TestingAndDebugging::ProhibitNoStrict) reason: dispatches to the XS function for the option's type
+    goto &{"zmq_setsockopt_$type"};
 }
 
 1;

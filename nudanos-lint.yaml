@@ -1,0 +1,4 @@
+# NuDanOS lint configuration (distro docs/porting.md)
+skip:
+  # Module::Install and Devel::CheckLib, bundled third-party build tools
+  - "inc/"

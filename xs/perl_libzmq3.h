@@ -17,16 +17,21 @@
 
 typedef struct {
 #ifdef tTHX /* tTHX doesn't exist in older perls */
+    // cppcheck-suppress unusedStructMember ; reason: used in perl_libzmq3.xs; cppcheck checks the header on its own
     tTHX    interp;
 #else
+    // cppcheck-suppress unusedStructMember ; reason: used in perl_libzmq3.xs; cppcheck checks the header on its own
     PerlInterpreter *interp;
 #endif
     pid_t   pid;
+    // cppcheck-suppress unusedStructMember ; reason: used in perl_libzmq3.xs; cppcheck checks the header on its own
     void   *ctxt;
 } P5ZMQ3_Context;
 
 typedef struct {
+    // cppcheck-suppress unusedStructMember ; reason: used in perl_libzmq3.xs; cppcheck checks the header on its own
     void  *socket;
+    // cppcheck-suppress unusedStructMember ; reason: used in perl_libzmq3.xs; cppcheck checks the header on its own
     SV    *assoc_ctxt; /* keep context around with sockets so we know */
     pid_t  pid;
 } P5ZMQ3_Socket;
@@ -34,10 +39,15 @@ typedef struct {
 typedef zmq_msg_t P5ZMQ3_Message;
 
 typedef struct {
+    // cppcheck-suppress unusedStructMember ; reason: used in perl_libzmq3.xs; cppcheck checks the header on its own
     int bucket_size;
+    // cppcheck-suppress unusedStructMember ; reason: used in perl_libzmq3.xs; cppcheck checks the header on its own
     int item_count;
+    // cppcheck-suppress unusedStructMember ; reason: used in perl_libzmq3.xs; cppcheck checks the header on its own
     zmq_pollitem_t **items;
+    // cppcheck-suppress unusedStructMember ; reason: used in perl_libzmq3.xs; cppcheck checks the header on its own
     char **item_ids;
+    // cppcheck-suppress unusedStructMember ; reason: used in perl_libzmq3.xs; cppcheck checks the header on its own
     SV  **callbacks;
 } PerlZMQ_PollItem;
 

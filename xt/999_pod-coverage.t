@@ -1,9 +1,13 @@
+#!/usr/bin/perl
 use strict;
+use warnings;
 use Test::More;
 use Test::Requires;
 
 test_requires 'Test::Pod::Coverage';
 
-Test::Pod::Coverage::all_pod_coverage_ok({
-    trustme => [ qr/^[A-Z_]+$/ ],
-});
+Test::Pod::Coverage::all_pod_coverage_ok(
+    {
+        trustme => [qr/^[A-Z_]+$/x],
+    }
+);
